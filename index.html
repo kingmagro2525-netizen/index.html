@@ -181,9 +181,10 @@
             <small style="color:#888;">※推奨: 5-15層 | 最大: 50層　注意⚠️:あまりに層が多いとgithubで公開する時に詰みます</small>
         </div>
         <div class="control-group">
-            <label>ダミーコード</label>
-            <input type="range" id="junkIntensity" min="1" max="100" value="80">
-            <div style="text-align: right; font-size: 0.9em;">高設定推奨</div>
+            <label>ダミーコード強度</label>
+            <input type="range" id="junkIntensity" min="1" max="500" value="200">
+            <div style="text-align: right; font-size: 0.9em;">現在: <span id="junkVal" style="color:var(--primary); font-weight:bold;">200</span></div>
+            <small style="color:#888;">※推奨: 150-300 | 最大: 500 (超高強度)</small>
         </div>
     </div>
     
@@ -216,6 +217,10 @@
         byId('layerVal').innerText = layers;
         byId('layerWarning').style.display = layers >= 30 ? 'block' : 'none';
     }
+
+    byId('junkIntensity').addEventListener('input', function() {
+        byId('junkVal').innerText = this.value;
+    });
 
     byId('btnObfuscate').addEventListener('click', async () => {
         await startObfuscation();
@@ -289,6 +294,64 @@
             String.fromCodePoint(byte),
         ).join("");
         return btoa(binString);
+    }
+
+    function generateMassiveJunkCode(intensity) {
+        let junk = "";
+        const junkTypes = [
+            () => `local ${generateVarName()} = ${Math.floor(Math.random() * 10000)};\n`,
+            () => `local ${generateVarName()} = "${randomString(20)}";\n`,
+            () => `local ${generateVarName()} = function() return ${Math.random()} end;\n`,
+            () => `local ${generateVarName()} = {${Array.from({length: 5}, () => Math.random()).join(',')}};\n`,
+            () => `if ${Math.random() > 0.5} then local ${generateVarName()} = nil end;\n`,
+            () => `for ${generateVarName()} = 1, ${Math.floor(Math.random() * 10)} do end;\n`,
+            () => `local ${generateVarName()} = math.floor(${Math.random() * 1000});\n`,
+            () => `local ${generateVarName()} = string.char(${Math.floor(Math.random() * 128)});\n`,
+            () => `local function ${generateVarName()}() return ${Math.random()} * ${Math.random()} end;\n`,
+            () => `local ${generateVarName()} = (function() return "${randomString(15)}" end)();\n`,
+            () => `do local ${generateVarName()} = ${Math.random()}; end;\n`,
+            () => `local ${generateVarName()} = table.concat({${Array.from({length: 3}, () => `"${randomString(5)}"`).join(',')}});\n`,
+            () => `while false do local ${generateVarName()} = true; break; end;\n`,
+            () => `local ${generateVarName()} = bit32 and bit32.bxor(${Math.floor(Math.random()*255)}, ${Math.floor(Math.random()*255)}) or 0;\n`,
+            () => `local ${generateVarName()} = setmetatable({}, {__index = function() return ${Math.random()} end});\n`,
+        ];
+
+        for (let i = 0; i < intensity; i++) {
+            const randomJunk = junkTypes[Math.floor(Math.random() * junkTypes.length)];
+            junk += randomJunk();
+            
+            if (i % 20 === 0) {
+                junk += `-- ${randomString(40)}\n`;
+            }
+            
+            if (i % 50 === 0) {
+                junk += `--[[ ${randomString(60)} ]]\n`;
+            }
+        }
+        
+        return junk;
+    }
+
+    function injectJunkIntoCode(code, intensity) {
+        const lines = code.split('\n');
+        let result = [];
+        
+        for (let i = 0; i < lines.length; i++) {
+            result.push(lines[i]);
+            
+            if (Math.random() > 0.7 && intensity > 50) {
+                const miniJunk = Math.floor(Math.random() * 3) + 1;
+                for (let j = 0; j < miniJunk; j++) {
+                    result.push(`local ${generateVarName()} = ${Math.floor(Math.random() * 1000)};`);
+                }
+            }
+            
+            if (i % 10 === 0 && intensity > 100) {
+                result.push(`-- Xxc Qop: ${randomString(50)}`);
+            }
+        }
+        
+        return result.join('\n');
     }
 
     async function startObfuscation() {
@@ -409,8 +472,19 @@ local ${V.lib} = (function()
     end
 end)()`;
 
-        let script = `-- [[ Obfuscated by YAJU - ${config.layers} layers ]] --\n`;
+        let script = `-- [[ Obfuscated by YAJU - ${config.layers} layers - Junk Level: ${config.junk} ]] --\n`;
+        
+        if (config.junk > 0) {
+            setStatus("ダミーコード生成中...", "process");
+            await sleep(100);
+            script += generateMassiveJunkCode(Math.floor(config.junk / 2));
+        }
+        
         script += fastBase64Decoder + "\n";
+
+        if (config.junk > 80) {
+            script += generateMassiveJunkCode(Math.floor(config.junk / 4));
+        }
 
         let finalPayloadCode = "";
         if (config.useShuffle) {
@@ -429,9 +503,18 @@ end)()`;
             tblStr += "}";
             
             script += `local ${V.tbl} = ${tblStr};\n`;
+            
+            if (config.junk > 100) {
+                script += generateMassiveJunkCode(Math.floor(config.junk / 5));
+            }
+            
             script += `local ${V.str} = ""; for i=1, #${V.tbl} do ${V.str} = ${V.str} .. ${V.tbl}[i] end;\n`;
         } else {
             script += `local ${V.str} = "${currentPayload}";\n`;
+        }
+
+        if (config.junk > 150) {
+            script += generateMassiveJunkCode(Math.floor(config.junk / 3));
         }
 
         if (config.useFlat) {
@@ -462,10 +545,22 @@ end)()`;
             let vmTable = "{\n";
             for(let i=0; i<states.length; i++) {
                 let next = (i === states.length - 1) ? -1 : (i + 1);
-                if (config.junk > 50 && Math.random() > 0.5) vmTable += `[${i+999}] = function() end,\n`;
+                
+                if (config.junk > 50) {
+                    const dummyCount = Math.floor(config.junk / 30);
+                    for (let d = 0; d < dummyCount; d++) {
+                        const dummyIdx = i * 1000 + d + 999;
+                        vmTable += `[${dummyIdx}] = function() local ${generateVarName()} = ${Math.random()}; return -1 end,\n`;
+                    }
+                }
+                
                 vmTable += `[${i}] = function() ${states[i]}; return ${next} end,\n`;
             }
             vmTable += "}";
+
+            if (config.junk > 200) {
+                script += generateMassiveJunkCode(Math.floor(config.junk / 4));
+            }
 
             script += `
 local ${V.st} = 0
@@ -474,7 +569,12 @@ while ${V.st} ~= -1 do
     ${V.st} = ${V.vm}[${V.st}]()
 end`;
         } else {
-            for (let i=0; i<config.layers; i++) script += `${V.str} = ${V.lib}(${V.str});\n`;
+            for (let i=0; i<config.layers; i++) {
+                script += `${V.str} = ${V.lib}(${V.str});\n`;
+                if (config.junk > 120 && i % 3 === 0) {
+                    script += `local ${generateVarName()} = ${Math.random()};\n`;
+                }
+            }
             
             if (config.useXor) {
                  script += `
@@ -489,11 +589,27 @@ end`;
                  ${V.str} = x(${V.str}, ${stringToByteString(key1)});
                  `;
             }
+            
+            if (config.junk > 180) {
+                script += generateMassiveJunkCode(Math.floor(config.junk / 3));
+            }
+            
             script += `loadstring(${V.str})()`;
         }
 
         if (config.junk > 0) {
-            script = script.replace(`-- [[ Obfuscated by YAJU - ${config.layers} layers ]] --`, `-- [[ Obfuscated by YAJU - ${config.layers} layers ]] --\n-- ${randomString(50)}`);
+            script = script.replace(`-- [[ Obfuscated by YAJU - ${config.layers} layers - Junk Level: ${config.junk} ]] --`, 
+                                    `-- [[ Obfuscated by YAJU - ${config.layers} layers - Junk Level: ${config.junk} ]] --\n-- ${randomString(80)}\n--[[ ${randomString(100)} ]]`);
+        }
+
+        if (config.junk > 100) {
+            setStatus("最終ダミーコード注入中...", "process");
+            await sleep(50);
+            script = injectJunkIntoCode(script, config.junk);
+        }
+        
+        if (config.junk > 250) {
+            script += "\n" + generateMassiveJunkCode(Math.floor(config.junk / 2));
         }
         
         return script;
