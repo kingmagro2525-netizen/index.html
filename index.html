@@ -5,452 +5,75 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>コード難読化サイト by YAJU</title>
 <style>
-    :root {
-        --bg: #0a0a0a;
-        --panel: #141414;
-        --primary: #ff5252;
-        --text: #e0e0e0;
-        --secondary: #4db6ac;
-    }
-    body {
-        font-family: 'Meiryo', sans-serif;
-        background-color: var(--bg);
-        color: var(--text);
-        margin: 0;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-height: 100vh;
-    }
-    .container {
-        width: 100%;
-        max-width: 950px;
-        background: var(--panel);
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.8);
-        border: 1px solid #333;
-    }
-    h1 { margin-top: 0; color: var(--primary); text-align: center; font-size: 28px; text-shadow: 0 0 10px rgba(255, 82, 82, 0.5); }
-    p.desc { text-align: center; color: #aaa; font-size: 0.95em; margin-bottom: 25px; }
-    
-    .control-group {
-        margin-bottom: 20px;
-        padding: 20px;
-        background: rgba(255,255,255,0.03);
-        border-radius: 8px;
-        border: 1px solid #2a2a2a;
-    }
-    label { display: block; margin-bottom: 10px; font-weight: bold; color: var(--secondary); }
-    
-    .file-upload-wrapper { position: relative; margin-bottom: 15px; }
-    input[type="file"] { display: none; }
-    .file-btn {
-        display: inline-block;
-        background: #222;
-        color: #eee;
-        padding: 12px 20px;
-        border-radius: 6px;
-        cursor: pointer;
-        border: 2px dashed #555;
-        transition: 0.3s;
-        text-align: center;
-        width: 100%;
-        box-sizing: border-box;
-        font-weight: bold;
-    }
-    .file-btn:hover { background: #333; border-color: var(--primary); color: var(--primary); }
-    .file-name { margin-top: 8px; font-size: 0.9em; color: #888; text-align: right; }
-
-    textarea {
-        width: 100%;
-        height: 180px;
-        background: #080808;
-        color: #2ecc71;
-        border: 1px solid #333;
-        border-radius: 6px;
-        font-family: 'Consolas', 'Monaco', monospace;
-        padding: 15px;
-        box-sizing: border-box;
-        resize: vertical;
-        font-size: 14px;
-    }
-    
-    input[type="range"] { width: 100%; margin: 15px 0; accent-color: var(--primary); cursor: pointer; }
-    
-    .options { 
-        display: flex; 
-        flex-wrap: wrap; 
-        gap: 20px; 
-    }
-    .options > div {
-        flex: 1 1 300px;
-        min-width: 250px;
-    }
-
-    .checkbox-label { display: flex; align-items: center; font-weight: normal; color: #ccc; cursor: pointer; transition: 0.2s; margin-bottom: 8px; }
-    .checkbox-label:hover { color: #fff; }
-    .checkbox-label input { margin-right: 12px; transform: scale(1.3); accent-color: var(--primary); }
-
-    button.main-btn {
-        background: linear-gradient(135deg, var(--primary), #d32f2f);
-        color: #fff;
-        border: none;
-        padding: 18px;
-        font-size: 20px;
-        font-weight: bold;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: 0.3s;
-        width: 100%;
-        margin-top: 15px;
-        box-shadow: 0 4px 15px rgba(255, 82, 82, 0.4);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-    button.main-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(255, 82, 82, 0.6); }
-    button.main-btn:disabled { background: #555; cursor: not-allowed; transform: none; box-shadow: none; }
-    
-    button.copy-btn {
-        background: var(--secondary);
-        color: #000;
-        border: none;
-        padding: 12px;
-        font-weight: bold;
-        border-radius: 6px;
-        cursor: pointer;
-        width: 100%;
-        margin-top: 10px;
-        transition: 0.2s;
-    }
-    button.copy-btn:hover { background: #26a69a; }
-
-    .status { margin-top: 20px; font-size: 1em; font-weight: bold; text-align: center; min-height: 1.5em; }
-
-    .progress-container {
-        width: 100%;
-        background-color: #222;
-        border-radius: 4px;
-        margin: 15px 0;
-        height: 6px;
-        display: none;
-        overflow: hidden;
-    }
-    .progress-bar {
-        width: 0%;
-        height: 100%;
-        background-color: var(--primary);
-        transition: width 0.1s;
-    }
-    .warning {
-        background: rgba(255, 152, 0, 0.1);
-        border-left: 4px solid #ff9800;
-        padding: 12px;
-        margin: 10px 0;
-        border-radius: 4px;
-        font-size: 0.9em;
-        color: #ffb74d;
-    }
+:root{--bg:#0a0a0a;--panel:#141414;--primary:#ff5252;--text:#e0e0e0;--secondary:#4db6ac}body{font-family:'Meiryo',sans-serif;background-color:var(--bg);color:var(--text);margin:0;padding:20px;display:flex;flex-direction:column;align-items:center;min-height:100vh}.container{width:100%;max-width:950px;background:var(--panel);padding:30px;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.8);border:1px solid #333}h1{margin-top:0;color:var(--primary);text-align:center;font-size:28px;text-shadow:0 0 10px rgba(255,82,82,.5)}p.desc{text-align:center;color:#aaa;font-size:.95em;margin-bottom:25px}.control-group{margin-bottom:20px;padding:20px;background:rgba(255,255,255,.03);border-radius:8px;border:1px solid #2a2a2a}label{display:block;margin-bottom:10px;font-weight:bold;color:var(--secondary)}.file-upload-wrapper{position:relative;margin-bottom:15px}input[type="file"]{display:none}.file-btn{display:inline-block;background:#222;color:#eee;padding:12px 20px;border-radius:6px;cursor:pointer;border:2px dashed #555;transition:.3s;text-align:center;width:100%;box-sizing:border-box;font-weight:bold}.file-btn:hover{background:#333;border-color:var(--primary);color:var(--primary)}.file-name{margin-top:8px;font-size:.9em;color:#888;text-align:right}textarea{width:100%;height:180px;background:#080808;color:#2ecc71;border:1px solid #333;border-radius:6px;font-family:'Consolas','Monaco',monospace;padding:15px;box-sizing:border-box;resize:vertical;font-size:14px}input[type="range"]{width:100%;margin:15px 0;accent-color:var(--primary);cursor:pointer}.options{display:flex;flex-wrap:wrap;gap:20px}.options>div{flex:1 1 300px;min-width:250px}.checkbox-label{display:flex;align-items:center;font-weight:normal;color:#ccc;cursor:pointer;transition:.2s;margin-bottom:8px}.checkbox-label:hover{color:#fff}.checkbox-label input{margin-right:12px;transform:scale(1.3);accent-color:var(--primary)}button.main-btn{background:linear-gradient(135deg,var(--primary),#d32f2f);color:#fff;border:none;padding:18px;font-size:20px;font-weight:bold;border-radius:8px;cursor:pointer;transition:.3s;width:100%;margin-top:15px;box-shadow:0 4px 15px rgba(255,82,82,.4);text-transform:uppercase;letter-spacing:1px}button.main-btn:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(255,82,82,.6)}button.main-btn:disabled{background:#555;cursor:not-allowed;transform:none;box-shadow:none}button.copy-btn{background:var(--secondary);color:#000;border:none;padding:12px;font-weight:bold;border-radius:6px;cursor:pointer;width:100%;margin-top:10px;transition:.2s}button.copy-btn:hover{background:#26a69a}.status{margin-top:20px;font-size:1em;font-weight:bold;text-align:center;min-height:1.5em}.progress-container{width:100%;background-color:#222;border-radius:4px;margin:15px 0;height:6px;display:none;overflow:hidden}.progress-bar{width:0%;height:100%;background-color:var(--primary);transition:width .1s}.warning{background:rgba(255,152,0,.1);border-left:4px solid #ff9800;padding:12px;margin:10px 0;border-radius:4px;font-size:.9em;color:#ffb74d}.discord-btn{position:fixed;bottom:30px;right:30px;width:60px;height:60px;background:#5865F2;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 12px rgba(88,101,242,.4);transition:all .3s ease;z-index:1000;text-decoration:none}.discord-btn:hover{transform:translateY(-5px) scale(1.1);box-shadow:0 8px 20px rgba(88,101,242,.6)}.discord-btn svg{width:32px;height:32px;fill:white}
 </style>
 </head>
 <body>
-
 <div class="container">
-    <h1>luaコード難読化サイト by YAJU</h1>
-    <p class="desc">いろいろなオプションが無料 - 最大50層対応</p>
-    
-    <div class="control-group">
-        <label>1. luaコード入力</label>
-        <div class="file-upload-wrapper">
-            <label for="fileInput" class="file-btn">📂 ファイルを選択 (.lua / .txt) - ドラッグ&ドロップ可</label>
-            <input type="file" id="fileInput" accept=".lua,.txt">
-            <div id="fileNameDisplay" class="file-name">ファイル未選択</div>
-        </div>
-        <textarea id="inputCode" placeholder="ここにコードを貼り付けるか、上のボタンからファイルを読み込んでください..."></textarea>
-    </div>
-
-    <div class="options">
-        <div class="control-group">
-            <label>Base64暗号化層数</label>
-            <input type="range" id="b64Layers" min="1" max="50" value="5" oninput="updateLayerDisplay()">
-            <div style="text-align: right; font-size: 0.9em;">現在の設定: <span id="layerVal" style="color:var(--primary); font-weight:bold;">5</span> 層</div>
-            <div id="layerWarning" class="warning" style="display:none;">
-                ⚠️ 警告: 30層以上は処理に時間がかかり、ファイルサイズが非常に大きくなります。
-            </div>
-            <small style="color:#888;">※推奨: 5-15層 | 最大: 50層　注意⚠️:あまりに層が多いとgithubで公開する時に詰みます</small>
-        </div>
-        <div class="control-group">
-            <label>ダミーコード</label>
-            <input type="range" id="junkIntensity" min="1" max="500" value="200">
-            <div style="text-align: right; font-size: 0.9em;">現在: <span id="junkVal" style="color:var(--primary); font-weight:bold;">200</span></div>
-            <small style="color:#888;">※推奨: 150-300 | 最大: 500 </small>
-        </div>
-    </div>
-    
-    <div class="control-group">
-        <label>高度なオプション</label>
-        <label class="checkbox-label"><input type="checkbox" id="chkXor" checked> XOR暗号化</label>
-        <label class="checkbox-label"><input type="checkbox" id="chkShuffle" checked>シャッフル</label>
-        <label class="checkbox-label"><input type="checkbox" id="chkFlat" checked> 制御フローの平坦化</label>
-    </div>
-
-    <button id="btnObfuscate" class="main-btn">世界で1番弱い難読化を実行</button>
-    
-    <div class="progress-container" id="progressContainer">
-        <div class="progress-bar" id="progressBar"></div>
-    </div>
-    <div class="status" id="status" style="color: var(--secondary);">準備完了</div>
-
-    <div class="control-group">
-        <label>2. 難読化されたコード</label>
-        <textarea id="outputCode" readonly placeholder="ここに結果が表示されます。実行するにはコピーしてください。"></textarea>
-        <button id="btnCopy" class="copy-btn">クリップボードにコピー</button>
-    </div>
+<h1>luaコード難読化サイト by YAJU</h1>
+<p class="desc">いろいろなオプションが無料 - 最大50層対応</p>
+<div class="control-group">
+<label>1. luaコード入力</label>
+<div class="file-upload-wrapper">
+<label for="fileInput" class="file-btn">📂 ファイルを選択 (.lua / .txt) - ドラッグ&ドロップ可</label>
+<input type="file" id="fileInput" accept=".lua,.txt">
+<div id="fileNameDisplay" class="file-name">ファイル未選択</div>
 </div>
-
+<textarea id="inputCode" placeholder="ここにコードを貼り付けるか、上のボタンからファイルを読み込んでください..."></textarea>
+</div>
+<div class="options">
+<div class="control-group">
+<label>Base64暗号化層数</label>
+<input type="range" id="b64Layers" min="1" max="50" value="5" oninput="updateLayerDisplay()">
+<div style="text-align:right;font-size:.9em">現在の設定: <span id="layerVal" style="color:var(--primary);font-weight:bold">5</span> 層</div>
+<div id="layerWarning" class="warning" style="display:none">⚠️ 警告: 30層以上は処理に時間がかかり、ファイルサイズが非常に大きくなります。</div>
+<small style="color:#888">※推奨: 5-15層 | 最大: 50層　注意⚠️:あまりに層が多いとgithubで公開する時に詰みます</small>
+</div>
+<div class="control-group">
+<label>ダミーコード</label>
+<input type="range" id="junkIntensity" min="1" max="500" value="200">
+<div style="text-align:right;font-size:.9em">現在: <span id="junkVal" style="color:var(--primary);font-weight:bold">200</span></div>
+<small style="color:#888">※推奨: 150-300 | 最大: 500</small>
+</div>
+</div>
+<div class="control-group">
+<label>高度なオプション</label>
+<label class="checkbox-label"><input type="checkbox" id="chkXor" checked> XOR暗号化</label>
+<label class="checkbox-label"><input type="checkbox" id="chkShuffle" checked>シャッフル</label>
+<label class="checkbox-label"><input type="checkbox" id="chkFlat" checked> 制御フローの平坦化</label>
+</div>
+<button id="btnObfuscate" class="main-btn">世界で1番弱い難読化を実行</button>
+<div class="progress-container" id="progressContainer"><div class="progress-bar" id="progressBar"></div></div>
+<div class="status" id="status" style="color:var(--secondary)">準備完了</div>
+<div class="control-group">
+<label>2. 難読化されたコード</label>
+<textarea id="outputCode" readonly placeholder="ここに結果が表示されます。実行するにはコピーしてください。"></textarea>
+<button id="btnCopy" class="copy-btn">クリップボードにコピー</button>
+</div>
+</div>
+<a href="https://discord.gg/qHmudNCUJ9" target="_blank" class="discord-btn" title="Discordサーバーに参加">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg>
+</a>
 <script>
-    const byId = (id) => document.getElementById(id);
-
-    function updateLayerDisplay() {
-        const layers = parseInt(byId('b64Layers').value);
-        byId('layerVal').innerText = layers;
-        byId('layerWarning').style.display = layers >= 30 ? 'block' : 'none';
-    }
-
-    byId('junkIntensity').addEventListener('input', function() {
-        byId('junkVal').innerText = this.value;
-    });
-
-    byId('btnObfuscate').addEventListener('click', async () => {
-        await startObfuscation();
-    });
-    byId('btnCopy').addEventListener('click', copyOutput);
-    byId('fileInput').addEventListener('change', handleFileSelect);
-
-    const dropZone = document.querySelector('.file-upload-wrapper');
-    dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.querySelector('.file-btn').style.borderColor = 'var(--primary)'; });
-    dropZone.addEventListener('dragleave', (e) => { e.preventDefault(); dropZone.querySelector('.file-btn').style.borderColor = '#555'; });
-    dropZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropZone.querySelector('.file-btn').style.borderColor = '#555';
-        if (e.dataTransfer.files.length > 0) {
-            byId('fileInput').files = e.dataTransfer.files;
-            handleFileSelect({ target: { files: e.dataTransfer.files } });
-        }
-    });
-
-    function handleFileSelect(e) {
-        const file = e.target.files[0];
-        if (!file) return;
-        byId('fileNameDisplay').innerText = `選択中: ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            byId('inputCode').value = e.target.result;
-            setStatus("ファイルを読み込みました。", "success");
-        };
-        reader.onerror = () => setStatus("ファイルの読み込みに失敗しました。", "error");
-        reader.readAsText(file);
-    }
-
-    function setStatus(msg, type) {
-        const status = byId('status');
-        status.innerText = msg;
-        status.style.color = type === 'error' ? '#ff5252' : (type === 'process' ? '#bb86fc' : '#4db6ac');
-    }
-
-    function updateProgress(percent) {
-        const bar = byId('progressBar');
-        const container = byId('progressContainer');
-        container.style.display = 'block';
-        bar.style.width = percent + '%';
-    }
-
-    const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
-    function randomString(length) {
-        const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_';
-        let result = '';
-        for (let i = 0; i < length; i++) result += chars.charAt(Math.floor(Math.random() * chars.length));
-        return result;
-    }
-
-    function generateVarName() {
-        const items = ["I", "l", "O", "_"];
-        let name = items[Math.floor(Math.random()*items.length)];
-        for(let i=0; i<7 + Math.floor(Math.random()*5); i++) name += items[Math.floor(Math.random()*items.length)];
-        name += randomString(3);
-        return name;
-    }
-
-    function stringToByteString(str) {
-        let res = "";
-        for (let i=0; i<str.length; i++) res += "\\" + str.charCodeAt(i);
-        return `"${res}"`;
-    }
-
-    function bytesToBase64(bytes) {
-        const binString = Array.from(bytes, (byte) =>
-            String.fromCodePoint(byte),
-        ).join("");
-        return btoa(binString);
-    }
-
-    function generateMassiveJunkCode(intensity) {
-        let junk = "";
-        const junkTypes = [
-            () => `local ${generateVarName()} = ${Math.floor(Math.random() * 10000)};\n`,
-            () => `local ${generateVarName()} = "${randomString(20)}";\n`,
-            () => `local ${generateVarName()} = function() return ${Math.random()} end;\n`,
-            () => `local ${generateVarName()} = {${Array.from({length: 5}, () => Math.random()).join(',')}};\n`,
-            () => `if ${Math.random() > 0.5} then local ${generateVarName()} = nil end;\n`,
-            () => `for ${generateVarName()} = 1, ${Math.floor(Math.random() * 10)} do end;\n`,
-            () => `local ${generateVarName()} = math.floor(${Math.random() * 1000});\n`,
-            () => `local ${generateVarName()} = string.char(${Math.floor(Math.random() * 128)});\n`,
-            () => `local function ${generateVarName()}() return ${Math.random()} * ${Math.random()} end;\n`,
-            () => `local ${generateVarName()} = (function() return "${randomString(15)}" end)();\n`,
-            () => `do local ${generateVarName()} = ${Math.random()}; end;\n`,
-            () => `local ${generateVarName()} = table.concat({${Array.from({length: 3}, () => `"${randomString(5)}"`).join(',')}});\n`,
-            () => `while false do local ${generateVarName()} = true; break; end;\n`,
-            () => `local ${generateVarName()} = bit32 and bit32.bxor(${Math.floor(Math.random()*255)}, ${Math.floor(Math.random()*255)}) or 0;\n`,
-            () => `local ${generateVarName()} = setmetatable({}, {__index = function() return ${Math.random()} end});\n`,
-        ];
-
-        for (let i = 0; i < intensity; i++) {
-            const randomJunk = junkTypes[Math.floor(Math.random() * junkTypes.length)];
-            junk += randomJunk();
-            
-            if (i % 20 === 0) {
-                junk += `-- ${randomString(40)}\n`;
-            }
-            
-            if (i % 50 === 0) {
-                junk += `--[[ ${randomString(60)} ]]\n`;
-            }
-        }
-        
-        return junk;
-    }
-
-    function injectJunkIntoCode(code, intensity) {
-        const lines = code.split('\n');
-        let result = [];
-        
-        for (let i = 0; i < lines.length; i++) {
-            result.push(lines[i]);
-            
-            if (Math.random() > 0.7 && intensity > 50) {
-                const miniJunk = Math.floor(Math.random() * 3) + 1;
-                for (let j = 0; j < miniJunk; j++) {
-                    result.push(`local ${generateVarName()} = ${Math.floor(Math.random() * 1000)};`);
-                }
-            }
-            
-            if (i % 10 === 0 && intensity > 100) {
-                result.push(`-- Xxc Qop: ${randomString(50)}`);
-            }
-        }
-        
-        return result.join('\n');
-    }
-
-    async function startObfuscation() {
-        const input = byId('inputCode').value;
-        if (!input.trim()) { setStatus("エラー: コードが入力されていません。", "error"); return; }
-
-        const layers = parseInt(byId('b64Layers').value);
-        if (layers > 30 && input.length > 5000) {
-            if (!confirm('警告: ファイルサイズが大きいため処理落ちしてしまう可能性があります、続行しますか？')) {
-                return;
-            }
-        }
-
-        const btn = byId('btnObfuscate');
-        btn.disabled = true;
-        updateProgress(0);
-        setStatus("難読化処理を実行中... (時間がかかる場合があります)", "process");
-
-        try {
-            await sleep(50);
-            const config = {
-                layers: layers,
-                junk: parseInt(byId('junkIntensity').value),
-                useXor: byId('chkXor').checked,
-                useShuffle: byId('chkShuffle').checked,
-                useFlat: byId('chkFlat').checked
-            };
-
-            const result = await processHeavyTask(input, config);
-            byId('outputCode').value = result;
-            const finalSize = (result.length / 1024).toFixed(2);
-            setStatus(`難読化が完了しました！(${finalSize} KB) コピーして使用してください。`, "success");
-            updateProgress(100);
-
-        } catch (e) {
-            console.error(e);
-            setStatus("エラーが発生しました: " + e.message, "error");
-        } finally {
-            btn.disabled = false;
-            setTimeout(() => { byId('progressContainer').style.display = 'none'; }, 2000);
-        }
-    }
-
-    async function processHeavyTask(source, config) {
-        let currentPayload = source;
-        const totalSteps = config.layers + 2; 
-        let currentStep = 0;
-
-        let key1 = randomString(32);
-        let key2 = randomString(32);
-        
-        if (config.useXor) {
-            setStatus("暗号化処理中...", "process");
-            const buf = new Uint8Array(currentPayload.length);
-            for(let i=0; i<currentPayload.length; i++) buf[i] = currentPayload.charCodeAt(i);
-            
-            for(let i=0; i<buf.length; i++) buf[i] ^= key1.charCodeAt(i % key1.length);
-            for(let i=0; i<buf.length; i++) buf[i] ^= key2.charCodeAt(i % key2.length);
-            
-            currentPayload = "";
-            const chunkSize = 0x8000;
-            for (let i = 0; i < buf.length; i += chunkSize) {
-                currentPayload += String.fromCharCode.apply(null, buf.subarray(i, i + chunkSize));
-            }
-            await sleep(10);
-        }
-
-        for (let i = 0; i < config.layers; i++) {
-            currentStep++;
-            updateProgress((currentStep / totalSteps) * 85);
-            setStatus(`暗号化レイヤー適用中 (${i+1}/${config.layers})...`, "process");
-            
-            try {
-                currentPayload = btoa(currentPayload);
-            } catch (e) {
-                const u8 = new Uint8Array(currentPayload.length);
-                for(let k=0; k<currentPayload.length; k++) u8[k] = currentPayload.charCodeAt(k);
-                currentPayload = bytesToBase64(u8);
-            }
-            
-            if (i % 5 === 0) await sleep(20);
-            
-            if (currentPayload.length > 10000000) {
-                setStatus(`警告: データサイズが大きくなっています (${(currentPayload.length/1024/1024).toFixed(2)} MB)`, "process");
-            }
-        }
-
-        setStatus("Luaローダー生成中...", "process");
-        const V = {
-            lib: generateVarName(),
-            str: generateVarName(),
-            tbl: generateVarName(),
-            func: generateVarName(),
-            vm: generateVarName(),
-            st: generateVarName(),
-        };
-
-        const fastBase64Decoder = `
-local ${V.lib} = (function()
+const byId=t=>document.getElementById(t);function updateLayerDisplay(){const t=parseInt(byId("b64Layers").value);byId("layerVal").innerText=t,byId("layerWarning").style.display=t>=30?"block":"none"}function handleFileSelect(t){const e=t.target.files[0];if(!e)return;byId("fileNameDisplay").innerText=`選択中: ${e.name} (${(e.size/1024).toFixed(1)} KB)`;const a=new FileReader;a.onload=t=>{byId("inputCode").value=t.target.result,setStatus("ファイルを読み込みました。","success")},a.onerror=()=>setStatus("ファイルの読み込みに失敗しました。","error"),a.readAsText(e)}function setStatus(t,e){const a=byId("status");a.innerText=t,a.style.color="error"===e?"#ff5252":"process"===e?"#bb86fc":"#4db6ac"}function updateProgress(t){const e=byId("progressBar"),a=byId("progressContainer");a.style.display="block",e.style.width=t+"%"}const sleep=t=>new Promise(e=>setTimeout(e,t));function randomString(t){const e="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";let a="";for(let r=0;r<t;r++)a+=e.charAt(Math.floor(Math.random()*e.length));return a}function generateVarName(){const t=["I","l","O","_"];let e=t[Math.floor(Math.random()*t.length)];for(let a=0;a<7+Math.floor(5*Math.random());a++)e+=t[Math.floor(Math.random()*t.length)];return e+=randomString(3),e}function stringToByteString(t){let e="";for(let a=0;a<t.length;a++)e+="\\"+t.charCodeAt(a);return`"${e}"`}function bytesToBase64(t){return btoa(Array.from(t,t=>String.fromCodePoint(t)).join(""))}function generateMassiveJunkCode(t){let e="";const a=[()=>`local ${generateVarName()} = ${Math.floor(1e4*Math.random())};
+`,()=>`local ${generateVarName()} = "${randomString(20)}";
+`,()=>`local ${generateVarName()} = function() return ${Math.random()} end;
+`,()=>`local ${generateVarName()} = {${Array.from({length:5},()=>Math.random()).join(",")}};
+`,()=>`if ${Math.random()>.5} then local ${generateVarName()} = nil end;
+`,()=>`for ${generateVarName()} = 1, ${Math.floor(10*Math.random())} do end;
+`,()=>`local ${generateVarName()} = math.floor(${1e3*Math.random()});
+`,()=>`local ${generateVarName()} = string.char(${Math.floor(128*Math.random())});
+`,()=>`local function ${generateVarName()}() return ${Math.random()} * ${Math.random()} end;
+`,()=>`local ${generateVarName()} = (function() return "${randomString(15)}" end)();
+`,()=>`do local ${generateVarName()} = ${Math.random()}; end;
+`,()=>`local ${generateVarName()} = table.concat({${Array.from({length:3},()=>`"${randomString(5)}"`).join(",")}});
+`,()=>`while false do local ${generateVarName()} = true; break; end;
+`,()=>`local ${generateVarName()} = bit32 and bit32.bxor(${Math.floor(255*Math.random())}, ${Math.floor(255*Math.random())}) or 0;
+`,()=>`local ${generateVarName()} = setmetatable({}, {__index = function() return ${Math.random()} end});
+`];for(let r=0;r<t;r++)e+=a[Math.floor(Math.random()*a.length)](),r%20==0&&(e+=`-- ${randomString(40)}
+`),r%50==0&&(e+=`--[[ ${randomString(60)} ]]
+`);return e}function injectJunkIntoCode(t,e){const a=t.split("\n");let r=[];for(let t=0;t<a.length;t++){if(r.push(a[t]),Math.random()>.7&&e>50){const t=Math.floor(3*Math.random())+1;for(let e=0;e<t;e++)r.push(`local ${generateVarName()} = ${Math.floor(1e3*Math.random())};`)}t%10==0&&e>100&&r.push(`-- Xxc Qop: ${randomString(50)}`)}return r.join("\n")}async function startObfuscation(){const t=byId("inputCode").value;if(!t.trim())return void setStatus("エラー: コードが入力されていません。","error");const e=parseInt(byId("b64Layers").value);if(e>30&&t.length>5e3&&!confirm("警告: ファイルサイズが大きいため処理落ちしてしまう可能性があります、続行しますか？"))return;const a=byId("btnObfuscate");a.disabled=!0,updateProgress(0),setStatus("難読化処理を実行中... (時間がかかる場合があります)","process");try{await sleep(50);const e={layers:parseInt(byId("b64Layers").value),junk:parseInt(byId("junkIntensity").value),useXor:byId("chkXor").checked,useShuffle:byId("chkShuffle").checked,useFlat:byId("chkFlat").checked},r=await processHeavyTask(t,e);byId("outputCode").value=r;const n=(r.length/1024).toFixed(2);setStatus(`難読化が完了しました！(${n} KB) コピーして使用してください。`,"success"),updateProgress(100)}catch(t){console.error(t),setStatus("エラーが発生しました: "+t.message,"error")}finally{a.disabled=!1,setTimeout(()=>{byId("progressContainer").style.display="none"},2e3)}}async function processHeavyTask(t,e){let a=t;const r=e.layers+2;let n=0,i=randomString(32),o=randomString(32);if(e.useXor){setStatus("暗号化処理中...","process");const t=new Uint8Array(a.length);for(let e=0;e<a.length;e++)t[e]=a.charCodeAt(e);for(let e=0;e<t.length;e++)t[e]^=i.charCodeAt(e%i.length);for(let e=0;e<t.length;e++)t[e]^=o.charCodeAt(e%o.length);a="";const e=32768;for(let r=0;r<t.length;r+=e)a+=String.fromCharCode.apply(null,t.subarray(r,r+e));await sleep(10)}for(let t=0;t<e.layers;t++){if(n++,updateProgress(n/r*85),setStatus(`暗号化レイヤー適用中 (${t+1}/${e.layers})...`,"process"),t%5==0&&await sleep(20),a.length>1e7&&setStatus(`警告: データサイズが大きくなっています (${(a.length/1024/1024).toFixed(2)} MB)`,"process"),0==t%1)try{a=btoa(a)}catch(t){const e=new Uint8Array(a.length);for(let t=0;t<a.length;t++)e[t]=a.charCodeAt(t);a=bytesToBase64(e)}}setStatus("Luaローダー生成中...","process");const l={lib:generateVarName(),str:generateVarName(),tbl:generateVarName(),func:generateVarName(),vm:generateVarName(),st:generateVarName()},s=`
+local ${l.lib} = (function()
     local b = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='
     local t = {}
     for i = 1, #b do t[string.byte(b, i, i)] = i - 1 end
@@ -470,61 +93,12 @@ local ${V.lib} = (function()
         end
         return table.concat(r)
     end
-end)()`;
-
-        let script = `-- [[ Obfuscated by YAJU - ${config.layers} layers - Junk Level: ${config.junk} ]] --\n`;
-        
-        if (config.junk > 0) {
-            setStatus("ダミーコード生成中...", "process");
-            await sleep(100);
-            script += generateMassiveJunkCode(Math.floor(config.junk / 2));
-        }
-        
-        script += fastBase64Decoder + "\n";
-
-        if (config.junk > 80) {
-            script += generateMassiveJunkCode(Math.floor(config.junk / 4));
-        }
-
-        let finalPayloadCode = "";
-        if (config.useShuffle) {
-            const chunkSize = 500;
-            let chunks = [];
-            for (let i = 0; i < currentPayload.length; i += chunkSize) chunks.push(currentPayload.substring(i, i + chunkSize));
-            
-            let indexed = chunks.map((v, i) => ({v, i}));
-            for (let i = indexed.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [indexed[i], indexed[j]] = [indexed[j], indexed[i]];
-            }
-            
-            let tblStr = "{";
-            indexed.forEach(item => tblStr += `[${item.i + 1}]="${item.v}",`);
-            tblStr += "}";
-            
-            script += `local ${V.tbl} = ${tblStr};\n`;
-            
-            if (config.junk > 100) {
-                script += generateMassiveJunkCode(Math.floor(config.junk / 5));
-            }
-            
-            script += `local ${V.str} = ""; for i=1, #${V.tbl} do ${V.str} = ${V.str} .. ${V.tbl}[i] end;\n`;
-        } else {
-            script += `local ${V.str} = "${currentPayload}";\n`;
-        }
-
-        if (config.junk > 150) {
-            script += generateMassiveJunkCode(Math.floor(config.junk / 3));
-        }
-
-        if (config.useFlat) {
-            let states = [];
-            for (let i=0; i<config.layers; i++) states.push(`${V.str} = ${V.lib}(${V.str})`);
-            
-            if (config.useXor) {
-                const xorFnName = generateVarName();
-                const xorDef = `
-                local function ${xorFnName}(s, k)
+end)()`;let c=`-- [[ Obfuscated by YAJU - ${e.layers} layers - Junk Level: ${e.junk} ]] --
+`;if(e.junk>0&&(setStatus("ダミーコード生成中...","process"),await sleep(100),c+=generateMassiveJunkCode(Math.floor(e.junk/2))),c+=s+"\n",e.junk>80&&(c+=generateMassiveJunkCode(Math.floor(e.junk/4))),e.useShuffle){const t=[];for(let e=0;e<a.length;e+=500)t.push(a.substring(e,e+500));let r=t.map((t,e)=>({v:t,i:e}));for(let t=r.length-1;t>0;t--){const e=Math.floor(Math.random()*(t+1));[r[t],r[e]]=[r[e],r[t]]}let n="{";r.forEach(t=>n+=`[${t.i+1}]="${t.v}",`),n+="}",c+=`local ${l.tbl} = ${n};
+`,e.junk>100&&(c+=generateMassiveJunkCode(Math.floor(e.junk/5))),c+=`local ${l.str} = ""; for i=1, #${l.tbl} do ${l.str} = ${l.str} .. ${l.tbl}[i] end;
+`}else c+=`local ${l.str} = "${a}";
+`;if(e.junk>150&&(c+=generateMassiveJunkCode(Math.floor(e.junk/3))),e.useFlat){let t=[];for(let a=0;a<e.layers;a++)t.push(`${l.str} = ${l.lib}(${l.str})`);if(e.useXor){const e=generateVarName(),a=`
+                local function ${e}(s, k)
                     local r = {}
                     local kl = #k
                     for i = 1, #s do
@@ -533,51 +107,16 @@ end)()`;
                         table.insert(r, string.char(bit32.bxor(b, kb)))
                     end
                     return table.concat(r)
-                end`;
-                script = script.replace(fastBase64Decoder, fastBase64Decoder + "\n" + xorDef);
-                
-                states.push(`${V.str} = ${xorFnName}(${V.str}, ${stringToByteString(key2)})`);
-                states.push(`${V.str} = ${xorFnName}(${V.str}, ${stringToByteString(key1)})`);
-            }
-            
-            states.push(`local f,e = loadstring(${V.str}); if f then f() end; return`);
-
-            let vmTable = "{\n";
-            for(let i=0; i<states.length; i++) {
-                let next = (i === states.length - 1) ? -1 : (i + 1);
-                
-                if (config.junk > 50) {
-                    const dummyCount = Math.floor(config.junk / 30);
-                    for (let d = 0; d < dummyCount; d++) {
-                        const dummyIdx = i * 1000 + d + 999;
-                        vmTable += `[${dummyIdx}] = function() local ${generateVarName()} = ${Math.random()}; return -1 end,\n`;
-                    }
-                }
-                
-                vmTable += `[${i}] = function() ${states[i]}; return ${next} end,\n`;
-            }
-            vmTable += "}";
-
-            if (config.junk > 200) {
-                script += generateMassiveJunkCode(Math.floor(config.junk / 4));
-            }
-
-            script += `
-local ${V.st} = 0
-local ${V.vm} = ${vmTable}
-while ${V.st} ~= -1 do
-    ${V.st} = ${V.vm}[${V.st}]()
-end`;
-        } else {
-            for (let i=0; i<config.layers; i++) {
-                script += `${V.str} = ${V.lib}(${V.str});\n`;
-                if (config.junk > 120 && i % 3 === 0) {
-                    script += `local ${generateVarName()} = ${Math.random()};\n`;
-                }
-            }
-            
-            if (config.useXor) {
-                 script += `
+                end`;c=c.replace(s,s+"\n"+a),t.push(`${l.str} = ${e}(${l.str}, ${stringToByteString(o)})`),t.push(`${l.str} = ${e}(${l.str}, ${stringToByteString(i)})`)}t.push(`local f,e = loadstring(${l.str}); if f then f() end; return`);let a="{\n";for(let r=0;r<t.length;r++){let n=r===t.length-1?-1:r+1;if(e.junk>50){const t=Math.floor(e.junk/30);for(let e=0;e<t;e++){a+=`[${1e3*r+e+999}] = function() local ${generateVarName()} = ${Math.random()}; return -1 end,
+`}}a+=`[${r}] = function() ${t[r]}; return ${n} end,
+`}a+="}",e.junk>200&&(c+=generateMassiveJunkCode(Math.floor(e.junk/4))),c+=`
+local ${l.st} = 0
+local ${l.vm} = ${a}
+while ${l.st} ~= -1 do
+    ${l.st} = ${l.vm}[${l.st}]()
+end`}else{for(let t=0;t<e.layers;t++)c+=`${l.str} = ${l.lib}(${l.str});
+`,e.junk>120&&t%3==0&&(c+=`local ${generateVarName()} = ${Math.random()};
+`);e.useXor&&(c+=`
                  local function x(s,k) 
                     local r={} 
                     for i=1,#s do 
@@ -585,42 +124,11 @@ end`;
                     end 
                     return table.concat(r) 
                  end
-                 ${V.str} = x(${V.str}, ${stringToByteString(key2)});
-                 ${V.str} = x(${V.str}, ${stringToByteString(key1)});
-                 `;
-            }
-            
-            if (config.junk > 180) {
-                script += generateMassiveJunkCode(Math.floor(config.junk / 3));
-            }
-            
-            script += `loadstring(${V.str})()`;
-        }
-
-        if (config.junk > 0) {
-            script = script.replace(`-- [[ Obfuscated by YAJU - ${config.layers} layers - Junk Level: ${config.junk} ]] --`, 
-                                    `-- [[ Obfuscated by YAJU - ${config.layers} layers - Junk Level: ${config.junk} ]] --\n-- ${randomString(80)}\n--[[ ${randomString(100)} ]]`);
-        }
-
-        if (config.junk > 100) {
-            setStatus("最終ダミーコード注入中...", "process");
-            await sleep(50);
-            script = injectJunkIntoCode(script, config.junk);
-        }
-        
-        if (config.junk > 250) {
-            script += "\n" + generateMassiveJunkCode(Math.floor(config.junk / 2));
-        }
-        
-        return script;
-    }
-
-    function copyOutput() {
-        const copyText = byId("outputCode");
-        copyText.select();
-        document.execCommand("copy");
-        setStatus("クリップボードにコピーしました！", "success");
-    }
+                 ${l.str} = x(${l.str}, ${stringToByteString(o)});
+                 ${l.str} = x(${l.str}, ${stringToByteString(i)});
+                 `),e.junk>180&&(c+=generateMassiveJunkCode(Math.floor(e.junk/3))),c+=`loadstring(${l.str})()`}return e.junk>0&&(c=c.replace(`-- [[ Obfuscated by YAJU - ${e.layers} layers - Junk Level: ${e.junk} ]] --`,`-- [[ Obfuscated by YAJU - ${e.layers} layers - Junk Level: ${e.junk} ]] --
+-- ${randomString(80)}
+--[[ ${randomString(100)} ]]`)),e.junk>100&&(setStatus("最終ダミーコード注入中...","process"),await sleep(50),c=injectJunkIntoCode(c,e.junk)),e.junk>250&&(c+="\n"+generateMassiveJunkCode(Math.floor(e.junk/2))),c}function copyOutput(){const t=byId("outputCode");t.select(),document.execCommand("copy"),setStatus("クリップボードにコピーしました！","success")}byId("junkIntensity").addEventListener("input",function(){byId("junkVal").innerText=this.value}),byId("btnObfuscate").addEventListener("click",async()=>{await startObfuscation()}),byId("btnCopy").addEventListener("click",copyOutput),byId("fileInput").addEventListener("change",handleFileSelect);const dropZone=document.querySelector(".file-upload-wrapper");dropZone.addEventListener("dragover",t=>{t.preventDefault(),dropZone.querySelector(".file-btn").style.borderColor="var(--primary)"}),dropZone.addEventListener("dragleave",t=>{t.preventDefault(),dropZone.querySelector(".file-btn").style.borderColor="#555"}),dropZone.addEventListener("drop",t=>{t.preventDefault(),dropZone.querySelector(".file-btn").style.borderColor="#555",t.dataTransfer.files.length>0&&(byId("fileInput").files=t.dataTransfer.files,handleFileSelect({target:{files:t.dataTransfer.files}}))});
 </script>
 </body>
 </html>
