@@ -41,7 +41,7 @@
 <label class="checkbox-label"><input type="checkbox" id="chkXor" checked> XOR暗号化</label>
 <label class="checkbox-label"><input type="checkbox" id="chkShuffle" checked>シャッフル</label>
 <label class="checkbox-label"><input type="checkbox" id="chkFlat" checked> 制御フローの平坦化</label>
-<label class="checkbox-label" style="color:var(--primary);"><input type="checkbox" id="chkAntiDump" checked> アンチダンパー (Anti-Dump)</label>
+<label class="checkbox-label" style="color:var(--primary);"><input type="checkbox" id="chkAntiDump" checked> アンチダンパー</label>
 </div>
 <button id="btnObfuscate" class="main-btn">世界で1番弱い難読化を実行</button>
 <div class="progress-container" id="progressContainer"><div class="progress-bar" id="progressBar"></div></div>
@@ -106,7 +106,7 @@ local ${l.lib} = (function()
 end)()`;let c=`-- [[ Obfuscated by YAJU - ${e.layers} layers - Junk Level: ${e.junk} ]] --
 `;
 if(e.useAntiDump){
-    setStatus("アンチダンパー機能を追加中 (Stealth)...", "process");
+    setStatus("アンチダンパー機能を追加中...", "process");
     const adVar1 = generateVarName();
     const adVar2 = generateVarName();
     const adVar3 = generateVarName();
