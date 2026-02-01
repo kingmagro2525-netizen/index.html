@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>コード難読化サイト by YAJU</title>
+<title>コード難読化サイト by YAJU (Dynamic Edition)</title>
 <style>
 :root{--bg:#0a0a0a;--panel:#141414;--primary:#ff5252;--text:#e0e0e0;--secondary:#4db6ac}body{font-family:'Meiryo',sans-serif;background-color:var(--bg);color:var(--text);margin:0;padding:20px;display:flex;flex-direction:column;align-items:center;min-height:100vh}.container{width:100%;max-width:950px;background:var(--panel);padding:30px;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.8);border:1px solid #333}h1{margin-top:0;color:var(--primary);text-align:center;font-size:28px;text-shadow:0 0 10px rgba(255,82,82,.5)}p.desc{text-align:center;color:#aaa;font-size:.95em;margin-bottom:25px}.control-group{margin-bottom:20px;padding:20px;background:rgba(255,255,255,.03);border-radius:8px;border:1px solid #2a2a2a}label{display:block;margin-bottom:10px;font-weight:bold;color:var(--secondary)}.file-upload-wrapper{position:relative;margin-bottom:15px}input[type="file"]{display:none}.file-btn{display:inline-block;background:#222;color:#eee;padding:12px 20px;border-radius:6px;cursor:pointer;border:2px dashed #555;transition:.3s;text-align:center;width:100%;box-sizing:border-box;font-weight:bold}.file-btn:hover{background:#333;border-color:var(--primary);color:var(--primary)}.file-name{margin-top:8px;font-size:.9em;color:#888;text-align:right}textarea{width:100%;height:180px;background:#080808;color:#2ecc71;border:1px solid #333;border-radius:6px;font-family:'Consolas','Monaco',monospace;padding:15px;box-sizing:border-box;resize:vertical;font-size:14px}input[type="range"]{width:100%;margin:15px 0;accent-color:var(--primary);cursor:pointer}.options{display:flex;flex-wrap:wrap;gap:20px}.options>div{flex:1 1 300px;min-width:250px}.checkbox-label{display:flex;align-items:center;font-weight:normal;color:#ccc;cursor:pointer;transition:.2s;margin-bottom:8px}.checkbox-label:hover{color:#fff}.checkbox-label input{margin-right:12px;transform:scale(1.3);accent-color:var(--primary)}button.main-btn{background:linear-gradient(135deg,var(--primary),#d32f2f);color:#fff;border:none;padding:18px;font-size:20px;font-weight:bold;border-radius:8px;cursor:pointer;transition:.3s;width:100%;margin-top:15px;box-shadow:0 4px 15px rgba(255,82,82,.4);text-transform:uppercase;letter-spacing:1px}button.main-btn:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(255,82,82,.6)}button.main-btn:disabled{background:#555;cursor:not-allowed;transform:none;box-shadow:none}button.copy-btn{background:var(--secondary);color:#000;border:none;padding:12px;font-weight:bold;border-radius:6px;cursor:pointer;width:100%;margin-top:10px;transition:.2s}button.copy-btn:hover{background:#26a69a}.status{margin-top:20px;font-size:1em;font-weight:bold;text-align:center;min-height:1.5em}.progress-container{width:100%;background-color:#222;border-radius:4px;margin:15px 0;height:6px;display:none;overflow:hidden}.progress-bar{width:0%;height:100%;background-color:var(--primary);transition:width .1s}.warning{background:rgba(255,152,0,.1);border-left:4px solid #ff9800;padding:12px;margin:10px 0;border-radius:4px;font-size:.9em;color:#ffb74d}.discord-btn{position:fixed;bottom:30px;right:30px;width:60px;height:60px;background:#5865F2;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 12px rgba(88,101,242,.4);transition:all .3s ease;z-index:1000;text-decoration:none}.discord-btn:hover{transform:translateY(-5px) scale(1.1);box-shadow:0 8px 20px rgba(88,101,242,.6)}.discord-btn svg{width:32px;height:32px;fill:white}.lite-mode-info{background:rgba(77,182,172,.1);border-left:4px solid var(--secondary);padding:12px;margin:10px 0;border-radius:4px;font-size:.9em;color:var(--secondary)}
 </style>
@@ -11,7 +11,7 @@
 <body>
 <div class="container">
 <h1>luaコード難読化サイト by YAJU</h1>
-<p class="desc">いろいろなオプションが無料 - 最大50層対応</p>
+<p class="desc">さまざまなオプションが無料</p>
 <div class="control-group">
 <label>1. luaコード入力</label>
 <div class="file-upload-wrapper">
@@ -38,7 +38,7 @@
 </div>
 <div class="control-group">
 <label>高度なオプション</label>
-<label class="checkbox-label"><input type="checkbox" id="chkXor" checked> 高度なXOR暗号化 (動的キー生成)</label>
+<label class="checkbox-label"><input type="checkbox" id="chkXor" checked>XOR難読化</label>
 <label class="checkbox-label"><input type="checkbox" id="chkShuffle" checked>シャッフル</label>
 <label class="checkbox-label"><input type="checkbox" id="chkFlat" checked> 制御フローの平坦化</label>
 <label class="checkbox-label" style="color:var(--primary);"><input type="checkbox" id="chkAntiDump" checked> アンチダンパー (Anti-Dump)</label>
@@ -70,87 +70,122 @@ function generateMassiveJunkCode(t,lite){let e="";const a=[()=>`local ${generate
 function injectJunkIntoCode(t,e,lite){const a=t.split("\n");let r=[];for(let t=0;t<a.length;t++){if(r.push(a[t]),Math.random()>.7&&e>50){const t=Math.floor(3*Math.random())+1;for(let e=0;e<t;e++)r.push(`local ${generateVarName(lite)}=${Math.floor(1e3*Math.random())};`)}!lite&&t%10==0&&e>100&&r.push(`--${randomString(50)}`)}return r.join(lite?'':'\n')}
 function minifyCode(code){code=code.replace(/--\[\[[\s\S]*?\]\]/g,'');code=code.replace(/--[^\n]*/g,'');code=code.replace(/\n\s*\n/g,'\n');code=code.replace(/\s*;\s*/g,';');code=code.replace(/\s*,\s*/g,',');code=code.replace(/\s*=\s*/g,'=');code=code.replace(/\s+/g,' ');return code.trim()}
 
-async function startObfuscation(){const t=byId("inputCode").value;if(!t.trim())return void setStatus("エラー: コードが入力されていません。","error");const e=parseInt(byId("b64Layers").value);const a=byId("btnObfuscate");a.disabled=!0,updateProgress(0),setStatus("高度な暗号化を実行中...","process");try{await sleep(50);const e={layers:parseInt(byId("b64Layers").value),junk:parseInt(byId("junkIntensity").value),useXor:byId("chkXor").checked,useShuffle:byId("chkShuffle").checked,useFlat:byId("chkFlat").checked,useAntiDump:byId("chkAntiDump").checked,useLite:byId("chkLite").checked},r=await processHeavyTask(t,e);byId("outputCode").value=r;const size=new Blob([r]).size;const sizeStr=size>=1048576?`${(size/1048576).toFixed(2)} MB`:size>=1024?`${(size/1024).toFixed(2)} KB`:`${size} bytes`;setStatus(`難読化が完了しました！ (${sizeStr})${e.useLite?' - 軽量化適用':''}`,e.useLite?"process":"success"),updateProgress(100)}catch(t){console.error(t),setStatus("エラーが発生しました: "+t.message,"error")}finally{a.disabled=!1,setTimeout(()=>{byId("progressContainer").style.display="none"},2e3)}}
+async function startObfuscation(){const t=byId("inputCode").value;if(!t.trim())return void setStatus("エラー: コードが入力されていません。","error");const e=parseInt(byId("b64Layers").value);const a=byId("btnObfuscate");a.disabled=!0,updateProgress(0),setStatus("36層カオスXOR暗号化を実行中...","process");try{await sleep(50);const e={layers:parseInt(byId("b64Layers").value),junk:parseInt(byId("junkIntensity").value),useXor:byId("chkXor").checked,useShuffle:byId("chkShuffle").checked,useFlat:byId("chkFlat").checked,useAntiDump:byId("chkAntiDump").checked,useLite:byId("chkLite").checked},r=await processHeavyTask(t,e);byId("outputCode").value=r;const size=new Blob([r]).size;const sizeStr=size>=1048576?`${(size/1048576).toFixed(2)} MB`:size>=1024?`${(size/1024).toFixed(2)} KB`:`${size} bytes`;setStatus(`難読化が完了しました！ (${sizeStr})${e.useLite?' - 軽量化適用':''}`,e.useLite?"process":"success"),updateProgress(100)}catch(t){console.error(t),setStatus("エラーが発生しました: "+t.message,"error")}finally{a.disabled=!1,setTimeout(()=>{byId("progressContainer").style.display="none"},2e3)}}
 
 async function processHeavyTask(t,e){
-const TARGET_SIZE=1.5*1024*1024;
-let a=t;
-const lite=e.useLite;
-
-// 軽量化モードの場合、入力サイズに基づいて設定を自動調整
-let adjustedLayers=e.layers;
-let adjustedJunk=e.junk;
-let adjustedXorPasses=16;
-let adjustedSeeds=8;
-
-if(lite){
-const inputSize=new Blob([t]).size;
-const estimatedExpansion=Math.pow(1.37,e.layers);
-const estimatedSize=inputSize*estimatedExpansion;
+    const TARGET_SIZE=1.5*1024*1024;
+    let a=t;
+    const lite=e.useLite;
+    let adjustedLayers=e.layers;
+    let adjustedJunk=e.junk;
     
-if(estimatedSize>TARGET_SIZE){
-setStatus("軽量化: ファイルサイズを1.5MB以下に調整中...","process");
-// 層数を動的に削減
-const maxSafeLayers=Math.max(3,Math.floor(Math.log(TARGET_SIZE/inputSize)/Math.log(1.37)));
-adjustedLayers=Math.min(e.layers,maxSafeLayers);
-// ダミーコードを大幅削減
-adjustedJunk=Math.min(e.junk,Math.floor(50+(TARGET_SIZE-inputSize*Math.pow(1.37,adjustedLayers))/500));
-// XOR設定を軽量化
-adjustedXorPasses=6;
-adjustedSeeds=3;
-await sleep(50);
-}else{
-// サイズに余裕がある場合は最小限の調整
-adjustedJunk=Math.min(e.junk,100);
-adjustedXorPasses=8;
-adjustedSeeds=4;
-}
-}
+    if(lite){
+        const inputSize=new Blob([t]).size;
+        const estimatedExpansion=Math.pow(1.37,e.layers);
+        const estimatedSize=inputSize*estimatedExpansion;
+        if(estimatedSize>TARGET_SIZE){
+            setStatus("軽量化: ファイルサイズを調整中...","process");
+            const maxSafeLayers=Math.max(3,Math.floor(Math.log(TARGET_SIZE/inputSize)/Math.log(1.37)));
+            adjustedLayers=Math.min(e.layers,maxSafeLayers);
+            adjustedJunk=Math.min(e.junk,Math.floor(50+(TARGET_SIZE-inputSize*Math.pow(1.37,adjustedLayers))/500));
+            await sleep(50);
+        }
+    }
+    const r=adjustedLayers+2;
+    let n=0;
+    
+    const XOR_DEPTH = 36;
+    let xorDecoderScript = "";
+    let vXorFuncVar = "";
+    
+    if(e.useXor){
+        setStatus("36層の動的カオス暗号化(Chaos Mode)を適用中...","process");
+        await sleep(20);
+        
+        let masterSeed = Math.floor(Math.random() * 99999999) + 100000;
+        let currentSeed = masterSeed;
+        const nextRand = () => {
+            currentSeed = (currentSeed * 1664525 + 1013904223) % 4294967296;
+            return currentSeed;
+        };
+        
+        let ops = [];
+        for(let i=0; i<XOR_DEPTH; i++){
+            let rnd = nextRand();
+            ops.push({
+                type: Math.floor((rnd % 100) / 34),
+                keyBase: Math.floor((rnd / 256) % 255) + 1,
+                prime: [2,3,5,7,11,13,17,19,23,29,31][Math.floor((rnd%1000)/100)] || 3
+            });
+        }
+        
+        let bytes=new Uint8Array(a.length);
+        for(let i=0;i<a.length;i++)bytes[i]=a.charCodeAt(i);
+        
+        for(let pass=0; pass<XOR_DEPTH; pass++){
+            const op = ops[pass];
+            const k = op.keyBase;
+            const p = op.prime;
+            
+            for(let i=0; i<bytes.length; i++){
+                let dynKey = (k * (i + p)) % 256;
+                if(op.type === 0){
+                    bytes[i] = bytes[i] ^ dynKey;
+                } else if(op.type === 1){
+                    bytes[i] = (bytes[i] + dynKey) % 256;
+                } else if(op.type === 2){
+                    bytes[i] = (bytes[i] - dynKey + 256) % 256;
+                }
+            }
+            if(pass % 5 === 0) updateProgress(pass/XOR_DEPTH * 30);
+        }
+        
+        let encryptedStr = "";
+        const chunkSize=32768;
+        for(let i=0;i<bytes.length;i+=chunkSize) encryptedStr+=String.fromCharCode.apply(null,bytes.subarray(i,i+chunkSize));
+        a = encryptedStr;
 
-const r=adjustedLayers+2;
-let n=0;
+        vXorFuncVar = generateVarName(lite);
+        
+        xorDecoderScript = `
+local function ${vXorFuncVar}(str)
+local b={}
+for i=1,#str do b[i]=string.byte(str,i) end
+local s=${masterSeed}
+local function n() s=(s*1664525+1013904223)%4294967296 return s end
+local ops={}
+local pr={2,3,5,7,11,13,17,19,23,29,31}
+for i=1,${XOR_DEPTH} do
+local r=n()
+local t=math.floor((r%100)/34)
+local k=math.floor((r/256)%255)+1
+local p=pr[math.floor((r%1000)/100)+1] or 3
+table.insert(ops,{t,k,p})
+end
+for pass=${XOR_DEPTH},1,-1 do
+local op=ops[pass]
+local t,k,p=op[1],op[2],op[3]
+for i=1,#b do
+local dk=(k*(i+p))%256
+if t==0 then b[i]=bit32.bxor(b[i],dk)
+elseif t==1 then b[i]=(b[i]-dk+256)%256
+elseif t==2 then b[i]=(b[i]+dk)%256 end
+end
+end
+local r={}
+for i=1,#b do r[i]=string.char(b[i]) end
+return table.concat(r)
+end
+`;
+    }
 
-let seedParams=[];
-let transformSteps=[];
+    for(let i=0;i<adjustedLayers;i++){n++;updateProgress(30 + n/r*60);if(i%5==0)await sleep(10);try{a=btoa(a)}catch(err){const bytes=new Uint8Array(a.length);for(let j=0;j<a.length;j++)bytes[j]=a.charCodeAt(j);a=bytesToBase64(bytes)}}
 
-if(e.useXor){
-setStatus("高度な動的XOR暗号化を適用中...","process");
-const numSeeds=lite?adjustedSeeds:8;
-for(let i=0;i<numSeeds;i++){
-seedParams.push({
-prime:[2,3,5,7,11,13,17,19,23,29,31,37,41,43,47][Math.floor(Math.random()*15)],
-offset:Math.floor(Math.random()*256),
-mult:Math.floor(Math.random()*127)+1
-});
-}
-let bytes=new Uint8Array(a.length);
-for(let i=0;i<a.length;i++)bytes[i]=a.charCodeAt(i);
-const passes=lite?adjustedXorPasses:16;
-for(let pass=0;pass<passes;pass++){
-const seed=seedParams[pass%numSeeds];
-const stepType=Math.floor(Math.random()*3);
-transformSteps.push({seed,stepType,pass});
-for(let i=0;i<bytes.length;i++){
-let key=((i*seed.prime+seed.offset)*seed.mult)%256;
-switch(stepType){
-case 0:bytes[i]=(bytes[i]^key);bytes[i]=((bytes[i]<<(pass%3))|(bytes[i]>>(8-(pass%3))))&0xFF;break;
-case 1:bytes[i]=((bytes[i]+key)^(i%256))&0xFF;break;
-case 2:bytes[i]=(bytes[i]^key)^((pass*17)%256);break;
-}
-}
-}
-a="";const chunkSize=32768;
-for(let i=0;i<bytes.length;i+=chunkSize)a+=String.fromCharCode.apply(null,bytes.subarray(i,i+chunkSize));
-await sleep(20);
-}
-
-for(let i=0;i<adjustedLayers;i++){n++;updateProgress(n/r*85);if(i%5==0)await sleep(10);try{a=btoa(a)}catch(err){const bytes=new Uint8Array(a.length);for(let j=0;j<a.length;j++)bytes[j]=a.charCodeAt(j);a=bytesToBase64(bytes)}}
-
-const l={lib:generateVarName(lite),str:generateVarName(lite),tbl:generateVarName(lite),func:generateVarName(lite),vm:generateVarName(lite),st:generateVarName(lite)};
-
-const decoderVar1=generateVarName(lite),decoderVar2=generateVarName(lite),decoderVar3=generateVarName(lite);
-const s=lite?`local ${decoderVar1}='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='local ${decoderVar2}={}for ${decoderVar3}=1,#${decoderVar1} do ${decoderVar2}[string.byte(${decoderVar1},${decoderVar3},${decoderVar3})]=${decoderVar3}-1 end local function ${l.lib}(s)local r,p,n={},1,#s for i=1,n,4 do local a,b,c,d=${decoderVar2}[string.byte(s,i,i)],${decoderVar2}[string.byte(s,i+1,i+1)],${decoderVar2}[string.byte(s,i+2,i+2)],${decoderVar2}[string.byte(s,i+3,i+3)]if not a or not b then break end r[p]=string.char((a*4+math.floor(b/16))%256)p=p+1 if not c then break end r[p]=string.char(((b%16)*16+math.floor(c/4))%256)p=p+1 if not d then break end r[p]=string.char(((c%4)*64+d)%256)p=p+1 end return table.concat(r)end`
-:`local ${decoderVar1}='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='
+    const l={lib:generateVarName(lite),str:generateVarName(lite),tbl:generateVarName(lite),func:generateVarName(lite),vm:generateVarName(lite),st:generateVarName(lite)};
+    const decoderVar1=generateVarName(lite),decoderVar2=generateVarName(lite),decoderVar3=generateVarName(lite);
+    
+    const s=lite?`local ${decoderVar1}='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='local ${decoderVar2}={}for ${decoderVar3}=1,#${decoderVar1} do ${decoderVar2}[string.byte(${decoderVar1},${decoderVar3},${decoderVar3})]=${decoderVar3}-1 end local function ${l.lib}(s)local r,p,n={},1,#s for i=1,n,4 do local a,b,c,d=${decoderVar2}[string.byte(s,i,i)],${decoderVar2}[string.byte(s,i+1,i+1)],${decoderVar2}[string.byte(s,i+2,i+2)],${decoderVar2}[string.byte(s,i+3,i+3)]if not a or not b then break end r[p]=string.char((a*4+math.floor(b/16))%256)p=p+1 if not c then break end r[p]=string.char(((b%16)*16+math.floor(c/4))%256)p=p+1 if not d then break end r[p]=string.char(((c%4)*64+d)%256)p=p+1 end return table.concat(r)end`
+    :`local ${decoderVar1}='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='
 local ${decoderVar2}={}
 for ${decoderVar3}=1,#${decoderVar1} do ${decoderVar2}[string.byte(${decoderVar1},${decoderVar3},${decoderVar3})]=${decoderVar3}-1 end
 local function ${l.lib}(s)local r,p,n={},1,#s
@@ -163,112 +198,55 @@ if not d then break end
 r[p]=string.char(((c%4)*64+d)%256)p=p+1 end
 return table.concat(r)end`;
 
-let c=lite?'':`-- [[ Advanced Obfuscation by YAJU - ${adjustedLayers} layers ]] --\n`;
+    let c=lite?'':`-- [[ Dynamic 36-Layer Chaos Obfuscation by YAJU ]] --\n`;
 
-if(e.useAntiDump){
-const adVar1=generateVarName(lite),adVar2=generateVarName(lite),adVar3=generateVarName(lite);
-c+=lite?`local function ${adVar1}()local ${adVar2}=getfenv()local ${adVar3}=${adVar2}[${strToChar("getgenv")}]if ${adVar3} then ${adVar3}()[${strToChar("saveinstance")}]=nil ${adVar3}()[${strToChar("save_instance")}]=nil ${adVar3}()[${strToChar("dumpstring")}]=nil end if debug then if debug.sethook then pcall(function()debug.sethook(function()while true do end end,"c")end)end if debug.getinfo then debug.getinfo=nil end end end pcall(${adVar1})`
-:`local function ${adVar1}()local ${adVar2}=getfenv()local ${adVar3}=${adVar2}[${strToChar("getgenv")}]if ${adVar3} then ${adVar3}()[${strToChar("saveinstance")}]=nil ${adVar3}()[${strToChar("save_instance")}]=nil ${adVar3}()[${strToChar("dumpstring")}]=nil end if debug then if debug.sethook then pcall(function()debug.sethook(function()while true do end end,"c")end)end if debug.getinfo then debug.getinfo=nil end end end pcall(${adVar1})\n`;
-}
+    if(e.useAntiDump){
+        const adVar1=generateVarName(lite),adVar2=generateVarName(lite),adVar3=generateVarName(lite);
+        c+=lite?`local function ${adVar1}()local ${adVar2}=getfenv()local ${adVar3}=${adVar2}[${strToChar("getgenv")}]if ${adVar3} then ${adVar3}()[${strToChar("saveinstance")}]=nil ${adVar3}()[${strToChar("save_instance")}]=nil ${adVar3}()[${strToChar("dumpstring")}]=nil end if debug then if debug.sethook then pcall(function()debug.sethook(function()while true do end end,"c")end)end if debug.getinfo then debug.getinfo=nil end end end pcall(${adVar1})`
+        :`local function ${adVar1}()local ${adVar2}=getfenv()local ${adVar3}=${adVar2}[${strToChar("getgenv")}]if ${adVar3} then ${adVar3}()[${strToChar("saveinstance")}]=nil ${adVar3}()[${strToChar("save_instance")}]=nil ${adVar3}()[${strToChar("dumpstring")}]=nil end if debug then if debug.sethook then pcall(function()debug.sethook(function()while true do end end,"c")end)end if debug.getinfo then debug.getinfo=nil end end end pcall(${adVar1})\n`;
+    }
 
-if(adjustedJunk>0)c+=generateMassiveJunkCode(Math.floor(adjustedJunk/(lite?20:5)),lite);
-c+=s+(lite?'':'\n');
+    if(adjustedJunk>0)c+=generateMassiveJunkCode(Math.floor(adjustedJunk/(lite?20:5)),lite);
+    c+=s+(lite?'':'\n');
 
-let vXorFunc="";
-if(e.useXor){
-vXorFunc=generateVarName(lite);
-const vSeeds=generateVarName(lite);
-const vSteps=generateVarName(lite);
-let seedsArray="{";
-seedParams.forEach(s=>{seedsArray+=`{${s.prime},${s.offset},${s.mult}},`;});
-seedsArray+="}";
-let stepsArray="{";
-for(let i=transformSteps.length-1;i>=0;i--){
-stepsArray+=`{${transformSteps[i].seed.prime},${transformSteps[i].seed.offset},${transformSteps[i].seed.mult},${transformSteps[i].stepType},${transformSteps[i].pass}},`;
-}
-stepsArray+="}";
-c+=lite?`local ${vSeeds}=${seedsArray}local ${vSteps}=${stepsArray}local function ${vXorFunc}(s)local b={}for i=1,#s do b[i]=string.byte(s,i)end for _,st in ipairs(${vSteps})do local pr,of,ml,tp,ps=st[1],st[2],st[3],st[4],st[5]for i=1,#b do local k=((i*pr+of)*ml)%256 if tp==0 then b[i]=bit32.bxor(b[i],k)local sh=ps%3 b[i]=bit32.band(bit32.bor(bit32.rshift(b[i],8-sh),bit32.lshift(b[i],sh)),0xFF)elseif tp==1 then b[i]=bit32.band(bit32.bxor((b[i]-k+256)%256,i%256),0xFF)elseif tp==2 then b[i]=bit32.bxor(bit32.bxor(b[i],k),(ps*17)%256)end end end local r={}for i=1,#b do r[i]=string.char(b[i]%256)end return table.concat(r)end`
-:`local ${vSeeds}=${seedsArray}
-local ${vSteps}=${stepsArray}
-local function ${vXorFunc}(s)
-local b={}for i=1,#s do b[i]=string.byte(s,i)end
-for _,st in ipairs(${vSteps})do
-local pr,of,ml,tp,ps=st[1],st[2],st[3],st[4],st[5]
-for i=1,#b do
-local k=((i*pr+of)*ml)%256
-if tp==0 then
-b[i]=bit32.bxor(b[i],k)
-local sh=ps%3
-b[i]=bit32.band(bit32.bor(bit32.rshift(b[i],8-sh),bit32.lshift(b[i],sh)),0xFF)
-elseif tp==1 then
-b[i]=bit32.band(bit32.bxor((b[i]-k+256)%256,i%256),0xFF)
-elseif tp==2 then
-b[i]=bit32.bxor(bit32.bxor(b[i],k),(ps*17)%256)
-end
-end
-end
-local r={}for i=1,#b do r[i]=string.char(b[i]%256)end
-return table.concat(r)
-end\n`;
-}
+    if(e.useXor && xorDecoderScript){
+        c += lite ? minifyCode(xorDecoderScript) : xorDecoderScript + "\n";
+    }
 
-if(e.useShuffle){
-const t=[];for(let e=0;e<a.length;e+=500)t.push(a.substring(e,e+500));
-let r=t.map((t,e)=>({v:t,i:e}));for(let t=r.length-1;t>0;t--){const e=Math.floor(Math.random()*(t+1));[r[t],r[e]]=[r[e],r[t]]}
-let n="{";r.forEach(t=>{
-let hexStr="";
-for(let e=0;e<t.v.length;e++){
-hexStr+="\\x"+t.v.charCodeAt(e).toString(16).toUpperCase().padStart(2,'0');
-}
-n+=`[${t.i+1}]="${hexStr}",`;
-});n+="}";
-c+=lite?`local ${l.tbl}=${n}local ${l.str}=""for i=1,#${l.tbl} do ${l.str}=${l.str}..${l.tbl}[i]end`:`local ${l.tbl}=${n}local ${l.str}=""for i=1,#${l.tbl} do ${l.str}=${l.str}..${l.tbl}[i]end\n`;
-}else{
-let hexData="";
-for(let i=0;i<a.length;i++){
-hexData+="\\x"+a.charCodeAt(i).toString(16).toUpperCase().padStart(2,'0');
-}
-c+=lite?`local ${l.str}="${hexData}"`:`local ${l.str}="${hexData}"\n`;
-}
+    if(e.useShuffle){
+        const t=[];for(let e=0;e<a.length;e+=500)t.push(a.substring(e,e+500));
+        let r=t.map((t,e)=>({v:t,i:e}));for(let t=r.length-1;t>0;t--){const e=Math.floor(Math.random()*(t+1));[r[t],r[e]]=[r[e],r[t]]}
+        let n="{";r.forEach(t=>{
+            n+=`[${t.i+1}]="${t.v}",`;
+        });n+="}";
+        c+=lite?`local ${l.tbl}=${n}local ${l.str}=""for i=1,#${l.tbl} do ${l.str}=${l.str}..${l.tbl}[i]end`:`local ${l.tbl}=${n}local ${l.str}=""for i=1,#${l.tbl} do ${l.str}=${l.str}..${l.tbl}[i]end\n`;
+    }else{
+        c+=lite?`local ${l.str}="${a}"`:`local ${l.str}="${a}"\n`;
+    }
 
-if(e.useFlat){
-let steps=[];
-for(let i=0;i<adjustedLayers;i++)steps.push(`${l.str}=${l.lib}(${l.str})`);
-if(e.useXor)steps.push(`${l.str}=${vXorFunc}(${l.str})`);
-steps.push(`local f=loadstring(${l.str})if f then f()end return`);
-let vm="{";
-for(let i=0;i<steps.length;i++)vm+=`[${i}]=function()${steps[i]} return ${i===steps.length-1?-1:i+1}end,`;
-vm+="}";
-c+=lite?`local ${l.st}=0 local ${l.vm}=${vm}while ${l.st}~=-1 do ${l.st}=${l.vm}[${l.st}]()end`:`local ${l.st}=0 local ${l.vm}=${vm}while ${l.st}~=-1 do ${l.st}=${l.vm}[${l.st}]()end`;
-}else{
-for(let i=0;i<adjustedLayers;i++)c+=lite?`${l.str}=${l.lib}(${l.str})`:`${l.str}=${l.lib}(${l.str})\n`;
-if(e.useXor)c+=lite?`${l.str}=${vXorFunc}(${l.str})`:`${l.str}=${vXorFunc}(${l.str})\n`;
-c+=`loadstring(${l.str})()`;
-}
+    if(e.useFlat){
+        let steps=[];
+        
+        for(let i=0;i<adjustedLayers;i++) steps.push(`${l.str}=${l.lib}(${l.str})`);
+        
+        if(e.useXor && vXorFuncVar) steps.push(`${l.str}=${vXorFuncVar}(${l.str})`);
+        
+        steps.push(`local f=loadstring(${l.str})if f then f()end return`);
+        
+        let vm="{";
+        for(let i=0;i<steps.length;i++)vm+=`[${i}]=function()${steps[i]} return ${i===steps.length-1?-1:i+1}end,`;
+        vm+="}";
+        c+=lite?`local ${l.st}=0 local ${l.vm}=${vm}while ${l.st}~=-1 do ${l.st}=${l.vm}[${l.st}]()end`:`local ${l.st}=0 local ${l.vm}=${vm}while ${l.st}~=-1 do ${l.st}=${l.vm}[${l.st}]()end`;
+    }else{
+        for(let i=0;i<adjustedLayers;i++)c+=lite?`${l.str}=${l.lib}(${l.str})`:`${l.str}=${l.lib}(${l.str})\n`;
+        if(e.useXor && vXorFuncVar) c+=lite?`${l.str}=${vXorFuncVar}(${l.str})`:`${l.str}=${vXorFuncVar}(${l.str})\n`;
+        c+=`loadstring(${l.str})()`;
+    }
 
-if(adjustedJunk>100)c=injectJunkIntoCode(c,adjustedJunk,lite);
-if(lite)c=minifyCode(c);
+    if(adjustedJunk>100)c=injectJunkIntoCode(c,adjustedJunk,lite);
+    if(lite)c=minifyCode(c);
 
-// 最終サイズチェックと追加調整
-if(lite){
-const finalSize=new Blob([c]).size;
-if(finalSize>TARGET_SIZE){
-setStatus("最終調整: さらにサイズを削減中...","process");
-await sleep(30);
-// シャッフル機能を無効化してサイズ削減
-if(e.useShuffle){
-let hexData="";
-for(let i=0;i<a.length;i++){
-hexData+="\\x"+a.charCodeAt(i).toString(16).toUpperCase().padStart(2,'0');
-}
-// 既存のシャッフル部分を置き換え
-const shufflePattern=new RegExp(`local ${l.tbl}=\\{[^}]*\\}local ${l.str}=""for i=1,#${l.tbl} do ${l.str}=${l.str}\\.\\.${l.tbl}\\[i\\]end`);
-c=c.replace(shufflePattern,`local ${l.str}="${hexData}"`);
-}
-}
-}
-
-return c;
+    return c;
 }
 
 function copyOutput(){const t=byId("outputCode");t.select(),document.execCommand("copy"),setStatus("クリップボードにコピーしました！","success")}
